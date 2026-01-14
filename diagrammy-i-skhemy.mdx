@@ -163,13 +163,13 @@ flowchart TD
 ```mermaid
 stateDiagram-v2
     [*] --> ClientWriting: Клиент пишет в Avito
-    ClientWriting --> SystemSync: Система загружает<br/>каждые 15-30 мин
-    SystemSync --> ManagerView: Появляется в ленте<br/>менеджера
-    ManagerView --> Active: Статус: АКТИВНЫЙ 🟢<br/>Непрочитан<br/>Требует ответа
-    Active --> ManagerReply: Менеджер видит<br/>и отвечает
-    ManagerReply --> PlatformSync: Ответ отправляется<br/>на Avito/Cian/Domclick
-    PlatformSync --> ClientReceive: Клиент видит<br/>ответ в приложении
-    ClientReceive --> Inactive: Чат становится<br/>НЕАКТИВНЫМ ⚪<br/>(клиент не пишет)
+    ClientWriting --> SystemSync: Система загружает\nкаждые 15-30 мин
+    SystemSync --> ManagerView: Появляется в ленте\nменеджера
+    ManagerView --> Active: Статус: АКТИВНЫЙ\nНепрочитан\nТребует ответа
+    Active --> ManagerReply: Менеджер видит\nи отвечает
+    ManagerReply --> PlatformSync: Ответ отправляется\nна Avito / Cian / Domclick
+    PlatformSync --> ClientReceive: Клиент видит\nответ в приложении
+    ClientReceive --> Inactive: Чат становится\nНЕАКТИВНЫМ\n(клиент не пишет)
     Inactive --> [*]
 ```
 
@@ -177,23 +177,23 @@ stateDiagram-v2
 
 ```mermaid
 graph TB
-    Chat Bridge["🎯 <br/>Центральная система"]
+    ChatBridge["🎯 Центральная система"]
 
     Avito["🔴 AVITO"]
     Cian["🔵 CIAN"]
     Domclick["🟢 DOMCLICK"]
 
-    AvitoAPI["OAuth авторизация<br/>XML Feeds<br/>Avito API"]
-    CianAPI["API Chats<br/>Cian API"]
-    DomclickAPI["API Stats<br/>Domclick API"]
+    AvitoAPI["OAuth авторизация\nXML Feeds\nAvito API"]
+    CianAPI["API Chats\nCian API"]
+    DomclickAPI["API Stats\nDomclick API"]
 
-    AvitoData["📋 Объявления<br/>💬 Чаты<br/>💭 Сообщения"]
-    CianData["💬 Чаты<br/>💭 Сообщения"]
-    DomclickData["💬 Чаты<br/>💭 Сообщения"]
+    AvitoData["Объявления\nЧаты\nСообщения"]
+    CianData["Чаты\nСообщения"]
+    DomclickData["Чаты\nСообщения"]
 
-    Chat Bridge --> AvitoAPI
-    Chat Bridge --> CianAPI
-    Chat Bridge --> DomclickAPI
+    ChatBridge --> AvitoAPI
+    ChatBridge --> CianAPI
+    ChatBridge --> DomclickAPI
 
     AvitoAPI --> Avito
     CianAPI --> Cian
@@ -203,7 +203,7 @@ graph TB
     Cian --> CianData
     Domclick --> DomclickData
 
-    style Chat Bridge fill:#fff3e0,stroke:#ff9800,stroke-width:3px
+    style ChatBridge fill:#fff3e0,stroke:#ff9800,stroke-width:3px
     style Avito fill:#ffebee
     style Cian fill:#e3f2fd
     style Domclick fill:#e8f5e9
