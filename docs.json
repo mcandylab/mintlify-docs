@@ -7,7 +7,7 @@
   },
   "navigation": {
     "pages": [
-      "reviews",
+      "review",
       "processes",
       "spravochnik-api-endpoints",
       "struktura-dannykh",
