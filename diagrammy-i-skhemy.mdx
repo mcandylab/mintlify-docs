@@ -5,22 +5,25 @@ title: "Диаграммы и схемы"
 Визуальные представления процессов и связей в системе.
 
 ```mermaid
-  flowchart LR
-    subgraph subgraph1
-        direction TB
-        top1[top] --> bottom1[bottom]
-    end
-    subgraph subgraph2
-        direction TB
-        top2[top] --> bottom2[bottom]
-    end
-    %% ^ These subgraphs are identical, except for the links to them:
+flowchart TD
+    A[Начало синхронизации]
 
-    %% Link *to* subgraph1: subgraph1 direction is maintained
-    outside --> subgraph1
-    %% Link *within* subgraph2:
-    %% subgraph2 inherits the direction of the top-level graph (LR)
-    outside ---> top2
+    A --> B1[Avito<br/>XML фид]
+    A --> B2[Cian<br/>API]
+    A --> B3[DomClick<br/>API]
+
+    B1 --> C1[Парсинг XML]
+    B2 --> C2[Запрос чатов]
+    B3 --> C3[Запрос чатов]
+
+    C1 --> D[Объединение данных]
+    C2 --> D
+    C3 --> D
+
+    D --> E[Привязка объявлений<br/>к менеджерам<br/>(по номерам телефонов)]
+    E --> F[Загрузка сообщений<br/>для каждого чата]
+    F --> G[Сохранение в базу данных]
+    G --> H[Синхронизация завершена]
 ```
 
 ## 1. Процесс регистрации пользователя
