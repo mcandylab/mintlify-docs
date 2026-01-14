@@ -85,7 +85,7 @@ title: 'Статусы и их значение'
 2. Переходит на сайт Avito
 3. Вводит логин/пароль
 4. Нажимает "Разрешить доступ"
-5. Avito отправляет код в Lumos
+5. Avito отправляет код в Chat Bridge
 6. Система получает токены
 
 **Переход:** Зависит от выбранных платформ:
@@ -208,24 +208,27 @@ title: 'Статусы и их значение'
 
 ## Диаграмма переходов статусов
 
-```
-NEW
-  ↓
-WAITING_FOR_PROVIDER_SELECTION
-  ↓
-WAITING_FOR_AVITO_FEED
-  ↓
-WAITING_FOR_AVITO_ACCESS
-  ↓
-  ├─> (если выбран Cian) → WAITING_FOR_CIAN_ACCESS
-  │                         ↓
-  │                    (если выбран Domclick) → WAITING_FOR_DOMCLICK_ACCESS
-  │                                             ↓
-  └─> (если выбран Domclick) → WAITING_FOR_DOMCLICK_ACCESS
-                               ↓
-                    WAITING_FOR_FULL_SYNCHRONIZATION
-                               ↓
-                          COMPLETED ✓
+```mermaid
+graph TD
+    NEW["NEW<br/>Компания создана"]
+
+    NEW --> PROV["WAITING_FOR_PROVIDER_SELECTION<br/>Выбор платформ"]
+
+    PROV --> AVITO_FEED["WAITING_FOR_AVITO_FEED<br/>URL фида Avito"]
+
+    AVITO_FEED --> AVITO_ACCESS["WAITING_FOR_AVITO_ACCESS<br/>OAuth авторизация Avito"]
+
+    AVITO_ACCESS -->|выбран Cian| CIAN["WAITING_FOR_CIAN_ACCESS<br/>API токен Cian"]
+    AVITO_ACCESS -->|выбран Domclick| DOMCLICK["WAITING_FOR_DOMCLICK_ACCESS<br/>Токены Domclick"]
+    AVITO_ACCESS -->|только Avito| SYNC["WAITING_FOR_FULL_SYNCHRONIZATION<br/>Загрузка данных"]
+
+    CIAN -->|выбран Domclick| DOMCLICK
+    CIAN -->|без Domclick| SYNC
+
+    DOMCLICK --> SYNC
+
+    SYNC -->|успешно| COMPLETED["COMPLETED ✓<br/>Готова к работе"]
+    SYNC -->|ошибка| SYNC
 ```
 
 ## Статусы сообщений
@@ -286,56 +289,48 @@ WAITING_FOR_AVITO_ACCESS
 
 ### Пример 1: Быстрая настройка (1 день)
 
-```
-День 1, 10:00 - Иван создаёт компанию "Иванов и партнёры"
-            └─> Статус: NEW → WAITING_FOR_PROVIDER_SELECTION
-
-День 1, 10:05 - Выбирает платформы: Avito + Cian
-            └─> Статус: WAITING_FOR_AVITO_FEED
-
-День 1, 10:10 - Вводит URL фида
-            └─> Система проверяет URL: OK
-            └─> Статус: WAITING_FOR_AVITO_ACCESS
-
-День 1, 10:15 - Авторизуется в Avito через OAuth
-            └─> Avito отправляет токены
-            └─> Статус: WAITING_FOR_CIAN_ACCESS
-
-День 1, 10:20 - Вводит токен Cian
-            └─> Система проверяет: OK
-            └─> Статус: WAITING_FOR_FULL_SYNCHRONIZATION
-
-День 1, 10:25-10:45 - Синхронизация
-            └─> Загружены 50 объявлений
-            └─> Загружены 120 чатов
-            └─> Загружены 450 сообщений
-            └─> Статус: COMPLETED ✓
-
-День 1, 10:45 - Иван видит всё готово
-            └─> Приглашает 3 менеджеров по ссылкам
-            └─> Менеджеры регистрируются и начинают работать
+```mermaid
+timeline
+    title Пример 1: Быстрая настройка (1 день)
+    10:00 : Иван создаёт компанию "Иванов и партнёры"
+          : Статус: NEW → WAITING_FOR_PROVIDER_SELECTION
+    10:05 : Выбирает платформы: Avito + Cian
+          : Статус: WAITING_FOR_AVITO_FEED
+    10:10 : Вводит URL фида
+          : Система проверяет URL: OK
+          : Статус: WAITING_FOR_AVITO_ACCESS
+    10:15 : Авторизуется в Avito через OAuth
+          : Avito отправляет токены
+          : Статус: WAITING_FOR_CIAN_ACCESS
+    10:20 : Вводит токен Cian
+          : Система проверяет: OK
+          : Статус: WAITING_FOR_FULL_SYNCHRONIZATION
+    10:25-10:45 : Синхронизация данных
+               : Загружены 50 объявлений
+               : Загружены 120 чатов
+               : Загружены 450 сообщений
+               : Статус: COMPLETED ✓
+    10:45 : Компания готова к работе
+          : Иван приглашает 3 менеджеров по ссылкам
+          : Менеджеры регистрируются и начинают работать
 ```
 
 ### Пример 2: Длительная настройка (1 неделя)
 
-```
-Понедельник, 10:00 - Иван создаёт компанию
-                  └─> Статус: NEW
-
-Понедельник, 10:05 - Выбирает платформы
-                  └─> Статус: WAITING_FOR_PROVIDER_SELECTION
-
-Вторник, 14:00 - Иван вводит URL фида (был занят)
-              └─> Статус: WAITING_FOR_AVITO_ACCESS
-
-Среда, 09:00 - Авторизуется в Avito
-             └─> Статус: WAITING_FOR_CIAN_ACCESS
-
-Четверг, 11:00 - Вводит токен Cian
-              └─> Статус: WAITING_FOR_FULL_SYNCHRONIZATION
-
-Четверг, 11:30 - Синхронизация завершена
-              └─> Статус: COMPLETED ✓
-
-Пятница, 10:00 - Все менеджеры добавлены и работают
+```mermaid
+timeline
+    title Пример 2: Длительная настройка (1 неделя)
+    Пн, 10:00 : Иван создаёт компанию
+              : Статус: NEW
+    Пн, 10:05 : Выбирает платформы
+              : Статус: WAITING_FOR_PROVIDER_SELECTION
+    Вт, 14:00 : Иван вводит URL фида (был занят)
+              : Статус: WAITING_FOR_AVITO_ACCESS
+    Ср, 09:00 : Авторизуется в Avito
+              : Статус: WAITING_FOR_CIAN_ACCESS
+    Чт, 11:00 : Вводит токен Cian
+              : Статус: WAITING_FOR_FULL_SYNCHRONIZATION
+    Чт, 11:30 : Синхронизация завершена
+              : Статус: COMPLETED ✓
+    Пт, 10:00 : Все менеджеры добавлены и работают
 ```
