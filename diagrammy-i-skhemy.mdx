@@ -172,46 +172,46 @@ stateDiagram-v2
     ClientReceive --> Inactive
     Inactive --> [*]
 
-    state ClientWriting {
+    note right of ClientWriting
         Клиент пишет в Avito
-    }
+    end note
 
-    state SystemSync {
+    note right of SystemSync
         Система загружает
-        каждые 15-30 мин
-    }
+        каждые 15–30 минут
+    end note
 
-    state ManagerView {
+    note right of ManagerView
         Появляется в ленте
         менеджера
-    }
+    end note
 
-    state Active {
+    note right of Active
         Статус: АКТИВНЫЙ
         Непрочитан
         Требует ответа
-    }
+    end note
 
-    state ManagerReply {
+    note right of ManagerReply
         Менеджер видит
         и отвечает
-    }
+    end note
 
-    state PlatformSync {
+    note right of PlatformSync
         Ответ отправляется
         на Avito / Cian / Domclick
-    }
+    end note
 
-    state ClientReceive {
+    note right of ClientReceive
         Клиент видит
         ответ в приложении
-    }
+    end note
 
-    state Inactive {
+    note right of Inactive
         Чат становится
         НЕАКТИВНЫМ
         (клиент не пишет)
-    }
+    end note
 
 ```
 
