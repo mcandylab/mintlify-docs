@@ -162,15 +162,57 @@ flowchart TD
 
 ```mermaid
 stateDiagram-v2
-    [*] --> ClientWriting: Клиент пишет в Avito
-    ClientWriting --> SystemSync: Система загружает\nкаждые 15-30 мин
-    SystemSync --> ManagerView: Появляется в ленте\nменеджера
-    ManagerView --> Active: Статус: АКТИВНЫЙ\nНепрочитан\nТребует ответа
-    Active --> ManagerReply: Менеджер видит\nи отвечает
-    ManagerReply --> PlatformSync: Ответ отправляется\nна Avito / Cian / Domclick
-    PlatformSync --> ClientReceive: Клиент видит\nответ в приложении
-    ClientReceive --> Inactive: Чат становится\nНЕАКТИВНЫМ\n(клиент не пишет)
+    [*] --> ClientWriting
+    ClientWriting --> SystemSync
+    SystemSync --> ManagerView
+    ManagerView --> Active
+    Active --> ManagerReply
+    ManagerReply --> PlatformSync
+    PlatformSync --> ClientReceive
+    ClientReceive --> Inactive
     Inactive --> [*]
+
+    state ClientWriting {
+        Клиент пишет в Avito
+    }
+
+    state SystemSync {
+        Система загружает
+        каждые 15-30 мин
+    }
+
+    state ManagerView {
+        Появляется в ленте
+        менеджера
+    }
+
+    state Active {
+        Статус: АКТИВНЫЙ
+        Непрочитан
+        Требует ответа
+    }
+
+    state ManagerReply {
+        Менеджер видит
+        и отвечает
+    }
+
+    state PlatformSync {
+        Ответ отправляется
+        на Avito / Cian / Domclick
+    }
+
+    state ClientReceive {
+        Клиент видит
+        ответ в приложении
+    }
+
+    state Inactive {
+        Чат становится
+        НЕАКТИВНЫМ
+        (клиент не пишет)
+    }
+
 ```
 
 ## 9. Интеграция с платформами
